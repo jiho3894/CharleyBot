@@ -1,5 +1,7 @@
 # CharleyBot
 
+- 코드는 수정하지않습니다. (초기 버전)
+
 찰리봇 제작코드 확인 : https://github.com/jiho3894/CharleyBot
 찰리봇이 추천하는 악마거래소 : https://jiho3894.github.io/CoinSite/
 
