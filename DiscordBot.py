@@ -2,6 +2,7 @@ import discord
 import time
 import asyncio
 import bs4
+import os
 from discord import client
 from discord.ext import commands
 from selenium.webdriver.chrome import options
@@ -10,7 +11,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from discord.utils import get
 from discord import FFmpegPCMAudio
-import os
 
 bot = commands.Bot(command_prefix='!')
 client = discord.Client()
@@ -99,7 +99,6 @@ async def on_ready():
 
     if not discord.opus.is_loaded():
         discord.opus.load_opus('opus')
-
 
 def load_chrome_driver():
 
@@ -387,4 +386,4 @@ async def 대기열삭제(ctx, *, number):
             else:
                 await ctx.send("숫자를 입력해주세요.")
 
-bot.run(os.environ['token'])
+bot.run('OTI1MjU3NDM3MjM2MzIyMzk1.YcqfIw.fvKuSnUfibxhiKUHSOZkQaEqySw')
