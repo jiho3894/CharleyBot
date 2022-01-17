@@ -4,6 +4,7 @@ import asyncio
 import bs4
 import os
 from discord import client
+from discord import embeds
 from discord.ext import commands
 from selenium.webdriver.chrome import options
 from youtube_dl import YoutubeDL
@@ -19,6 +20,12 @@ user = []
 musictitle = []
 song_queue = []
 musicnow = []
+
+number = 1
+
+userF = []
+userFlist = []
+allplaylist = []
 
 
 def title(msg):
@@ -89,16 +96,31 @@ def play_next(ctx):
             client.loop.create_task(vc.disconnect())
 
 
+def again(ctx, url):
+    global number
+    YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
+    FFMPEG_OPTIONS = {
+        'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+    if number:
+        with YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(url, download=False)
+        URL = info['formats'][0]['url']
+        if not vc.is_playing():
+            vc.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS),
+                    after=lambda e: again(ctx, url))
+
+
 @bot.event  # 봇 실행 확인 문자
 async def on_ready():
     print('다음으로 로그인합니다: ')
     print(bot.user.name)
     print('connection was succesful')
     # 활동 상태 문구 수정창
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game("치즈대신 노래 재생"))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game("!흰쥐찰리 <- 부르기"))
 
     if not discord.opus.is_loaded():
         discord.opus.load_opus('opus')
+
 
 def load_chrome_driver():
 
@@ -116,25 +138,35 @@ def load_chrome_driver():
 @bot.command()
 async def 흰쥐찰리(ctx):
     await ctx.send(embed=discord.Embed(title='찰리봇 도우미', description="""
-찰리봇 제작코드 확인 : https://github.com/jiho3894/CharleyBot
-찰리봇이 추천하는 악마거래소 : https://jiho3894.github.io/CoinSite/
-\n!흰쥐찰리 -> 찰리봇의 모든 명령어를 볼 수 있습니다.
+찰리봇 주인 : https://github.com/jiho3894
+찰리플릭스 (작업중): https://jiho3894.github.io/kimcharley/
+찰리코인 : https://jiho3894.github.io/CoinSite/
+(2022.01.18 version)
+완료 : 즐겨찾기 명령어 추가
+예정 : 즐겨찾기 플레이리스트로 추가 (현재는 목록 추가후 !목록재생으로 사용바람)
+
+!흰쥐찰리 -> 찰리봇의 모든 명령어를 볼 수 있습니다.
 \n!들어와잇 -> 찰리봇을 자신이 속한 채널로 부릅니다.
 !나가잇 -> 찰리봇을 자신이 속한 채널에서 내보냅니다.
 \n!재생 [노래이름] -> 찰리봇이 노래를 검색해 틀어줍니다.
-(!재생 [가수명] [노래제목] 명령을 권장합니다)
+* !재생 [가수명] [노래제목] 명령을 권장합니다 *
+!반복 [노래이름] -> 노래를 반복 재생합니다.
+* 반복 사용이후 명령어를 새로 입력해주세요 *
 !다음 -> 현재 재생중인 노래 다음 곡을 재생합니다.
 \n!일시정지 -> 현재 재생중인 노래를 일시정지시킵니다.
 !다시재생 -> 일시정지시킨 노래를 다시 재생합니다.
 \n!지금노래 -> 지금 재생되고 있는 노래의 제목을 알려줍니다.
 \n!멜론차트 -> 최신 멜론차트를 재생합니다.
+\n!즐겨찾기 -> 본인의 즐겨찾기 목록을 보여줍니다.
+!즐겨찾기추가 [가수명] [노래제목]-> 본인의 즐겨찾기 목록에 노래를 추가합니다.
+!즐겨찾기삭제 [재생 순서 숫자]-> 본인의 즐겨찾기 목록에 노래를 삭제합니다.
 \n!목록 -> 이어서 재생할 노래목록을 보여줍니다.
 !목록재생 -> 목록에 추가된 노래를 재생합니다.
 !목록초기화 -> 목록에 추가된 모든 노래를 지웁니다.
 \n!대기열추가 [노래] -> 노래를 대기열에 추가합니다.
-!대기열삭제 [숫자] -> 대기열에서 입력한 숫자에 해당하는 노래를 지웁니다.
+!대기열삭제 [재생 순서 숫자] -> 대기열에서 입력한 숫자에 해당하는 노래를 지웁니다.
 \n!노래틀어 [노래 유튜브링크] -> 유튜브URL를 입력하면 찰리봇이 노래를 틀어줍니다.
-(목록재생에서는 사용할 수 없습니다. 1회용입니다)""", color=0x00ff00))
+(목록재생에서는 사용할 수 없습니다. 1회용입니다)""", color=0x00ffff))
 
 
 @bot.command()
@@ -142,6 +174,36 @@ async def 들어와잇(ctx):
     try:
         global vc
         vc = await ctx.message.author.voice.channel.connect()
+        await ctx.send(embed=discord.Embed(title='찰리봇 도우미', description="""
+찰리봇 주인 : https://github.com/jiho3894
+찰리플릭스 : https://jiho3894.github.io/kimcharley/
+찰리코인 : https://jiho3894.github.io/CoinSite/
+(2022.01.18 version)
+완료 : 즐겨찾기 명령어 추가
+예정 : 즐겨찾기 플레이리스트로 추가 (현재는 목록 추가후 !목록재생으로 사용바람)
+
+!흰쥐찰리 -> 찰리봇의 모든 명령어를 볼 수 있습니다.
+\n!들어와잇 -> 찰리봇을 자신이 속한 채널로 부릅니다.
+!나가잇 -> 찰리봇을 자신이 속한 채널에서 내보냅니다.
+\n!재생 [노래이름] -> 찰리봇이 노래를 검색해 틀어줍니다.
+* !재생 [가수명] [노래제목] 명령을 권장합니다 *
+!반복 [노래이름] -> 노래를 반복 재생합니다.
+* 반복 사용이후 명령어를 새로 입력해주세요 *
+!다음 -> 현재 재생중인 노래 다음 곡을 재생합니다.
+\n!일시정지 -> 현재 재생중인 노래를 일시정지시킵니다.
+!다시재생 -> 일시정지시킨 노래를 다시 재생합니다.
+\n!지금노래 -> 지금 재생되고 있는 노래의 제목을 알려줍니다.
+\n!멜론차트 -> 최신 멜론차트를 재생합니다.
+\n!즐겨찾기 -> 본인의 즐겨찾기 목록을 보여줍니다.
+!즐겨찾기추가 [가수명] [노래제목]-> 본인의 즐겨찾기 목록에 노래를 추가합니다.
+!즐겨찾기삭제 [재생 순서 숫자]-> 본인의 즐겨찾기 목록에 노래를 삭제합니다.
+\n!목록 -> 이어서 재생할 노래목록을 보여줍니다.
+!목록재생 -> 목록에 추가된 노래를 재생합니다.
+!목록초기화 -> 목록에 추가된 모든 노래를 지웁니다.
+\n!대기열추가 [노래] -> 노래를 대기열에 추가합니다.
+!대기열삭제 [숫자] -> 대기열에서 입력한 숫자에 해당하는 노래를 지웁니다.
+\n!노래틀어 [노래 유튜브링크] -> 유튜브URL를 입력하면 찰리봇이 노래를 틀어줍니다.
+(목록재생에서는 사용할 수 없습니다. 1회용입니다)""", color=0x00ffff))
     except:
         try:
             await vc.move_to(ctx.message.author.voice.channel)
@@ -232,9 +294,48 @@ async def 재생(ctx, *, msg):
 
 
 @bot.command()
+async def 반복(ctx, *, msg):
+
+    try:
+        global vc
+        vc = await ctx.message.author.voice.channel.connect()
+    except:
+        try:
+            await vc.move_to(ctx.message.author.voice.channel)
+        except:
+            pass
+
+    global entireText
+    global number
+    number = 1
+    YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
+    FFMPEG_OPTIONS = {
+        'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+
+    if len(musicnow) - len(user) >= 1:
+        for i in range(len(musicnow) - len(user)):
+            del musicnow[0]
+
+    driver = load_chrome_driver()
+    driver.get("https://www.youtube.com/results?search_query="+msg+"+lyrics")
+    source = driver.page_source
+    bs = bs4.BeautifulSoup(source, 'lxml')
+    entire = bs.find_all('a', {'id': 'video-title'})
+    entireNum = entire[0]
+    entireText = entireNum.text.strip()
+    musicnow.insert(0, entireText)
+    test1 = entireNum.get('href')
+    url = 'https://www.youtube.com'+test1
+    await ctx.send(embed=discord.Embed(title="반복재생", description="현재 " + musicnow[0] + "을(를) 반복재생하고 있습니다.", color=0x00ff00))
+    again(ctx, url)
+
+
+@bot.command()
 async def 다음(ctx):
     if vc.is_playing():
         vc.stop()
+        global number
+        number = 0
         await ctx.send(embed=discord.Embed(title="노래끄기", description=musicnow[0] + "을(를) 종료했습니다.", color=0x00ff00))
     else:
         await ctx.send("지금 노래가 재생되지 않네요.")
@@ -385,5 +486,123 @@ async def 대기열삭제(ctx, *, number):
                 await ctx.send("숫자의 범위가 목록개수를 벗어났습니다.")
             else:
                 await ctx.send("숫자를 입력해주세요.")
+
+
+@bot.command()
+async def 즐겨찾기(ctx):
+    global Ftext
+    Ftext = ""
+    correct = 0
+    global Flist
+    for i in range(len(userF)):
+        if userF[i] == str(ctx.message.author.name):
+            correct = 1  # 있으면 넘김
+    if correct == 0:
+        userF.append(str(ctx.message.author.name))
+        userFlist.append([])
+        userFlist[len(userFlist)-1].append(str(ctx.message.author.name))
+
+    for i in range(len(userFlist)):
+        if userFlist[i][0] == str(ctx.message.author.name):
+            if len(userFlist[i]) >= 2:
+                for j in range(1, len(userFlist[i])):
+                    Ftext = Ftext + "\n" + str(j) + ". " + str(userFlist[i][j])
+                titlename = str(ctx.message.author.name) + "님의 즐겨찾기"
+                embed = discord.Embed(
+                    title=titlename, description=Ftext.strip(), color=0x00ff00)
+                embed.add_field(name="목록에 추가\U0001F4E5",
+                                value="즐겨찾기에 모든 곡들을 목록에 추가합니다.", inline=False)
+                embed.add_field(name="플레이리스트로 추가\U0001F4DD",
+                                value="즐겨찾기에 모든 곡들을 새로운 플레이리스트로 저장합니다 (업데이트 예정)", inline=False)
+                Flist = await ctx.send(embed=embed)
+                await Flist.add_reaction("\U0001F4E5")
+                # await Flist.add_reaction("\U0001F4DD")
+            else:
+                await ctx.send("아직 등록하신 즐겨찾기가 없어요.")
+
+
+@bot.command()
+async def 즐겨찾기추가(ctx, *, msg):
+    correct = 0
+    for i in range(len(userF)):
+        if userF[i] == str(ctx.message.author.name):
+            correct = 1
+    if correct == 0:
+        userF.append(str(ctx.message.author.name))
+        userFlist.append([])
+        userFlist[len(userFlist)-1].append(str(ctx.message.author.name))
+
+    for i in range(len(userFlist)):
+        if userFlist[i][0] == str(ctx.message.author.name):
+
+            options = webdriver.ChromeOptions()
+            options.add_argument("headless")
+
+            driver = load_chrome_driver()
+            driver.get(
+                "https://www.youtube.com/results?search_query="+msg+"+lyrics")
+            source = driver.page_source
+            bs = bs4.BeautifulSoup(source, 'lxml')
+            entire = bs.find_all('a', {'id': 'video-title'})
+            entireNum = entire[0]
+            music = entireNum.text.strip()
+
+            driver.quit()
+
+            userFlist[i].append(music)
+            await ctx.send(music + "(이)가 정상적으로 등록되었어요!")
+
+
+@bot.command()
+async def 즐겨찾기삭제(ctx, *, number):
+    correct = 0
+    for i in range(len(userF)):
+        if userF[i] == str(ctx.message.author.name):
+            correct = 1
+    if correct == 0:
+        userF.append(str(ctx.message.author.name))
+        userFlist.append([])
+        userFlist[len(userFlist)-1].append(str(ctx.message.author.name))
+
+    for i in range(len(userFlist)):
+        if userFlist[i][0] == str(ctx.message.author.name):
+            if len(userFlist[i]) >= 2:
+                try:
+                    del userFlist[i][int(number)]
+                    await ctx.send("정상적으로 삭제되었습니다.")
+                except:
+                    await ctx.send("입력한 숫자가 잘못되었거나 즐겨찾기의 범위를 초과하였습니다.")
+            else:
+                await ctx.send("즐겨찾기에 노래가 없어서 지울 수 없어요!")
+
+
+@bot.event
+async def on_reaction_add(reaction, users):
+    if users.bot == 1:
+        pass
+    else:
+        try:
+            await Flist.delete()
+        except:
+            pass
+        else:
+            if str(reaction.emoji) == '\U0001F4E5':
+                await reaction.message.channel.send("잠시만 기다려주세요. (즐겨찾기 갯수가 많으면 지연될 수 있습니다.)")
+                print(users.name)
+                for i in range(len(userFlist)):
+                    if userFlist[i][0] == str(users.name):
+                        for j in range(1, len(userFlist[i])):
+                            try:
+                                driver = load_chrome_driver()
+                                driver.close()
+                            except:
+                                print("NOT CLOSED")
+
+                            user.append(userFlist[i][j])
+                            result, URLTEST = title(userFlist[i][j])
+                            song_queue.append(URLTEST)
+                            await reaction.message.channel.send(userFlist[i][j] + "를 재생목록에 추가했어요!")
+            elif str(reaction.emoji) == '\U0001F4DD':
+                await reaction.message.channel.send("playlist test code...")
 
 bot.run('OTI1MjU3NDM3MjM2MzIyMzk1.YcqfIw.fvKuSnUfibxhiKUHSOZkQaEqySw')
