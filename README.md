@@ -1,5 +1,7 @@
 # CharleyBot
 
+![0](https://user-images.githubusercontent.com/79081800/150473965-fbc32c06-12b2-4b22-8c75-fba34e923475.jpg)
+
 - 코드는 수정하지않습니다. (초기 버전)
 
 찰리봇 도우미
