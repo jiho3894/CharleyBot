@@ -140,8 +140,8 @@ async def 흰쥐찰리(ctx):
     await ctx.send(embed=discord.Embed(title='찰리봇 도우미', description="""
 찰리봇 주인 : https://github.com/jiho3894
 오리 : http://duckpan.shop/
-(2022.02.01)
-마지막 업데이트 오류시 개인 이용자는 *오리*에 남겨주세요
+(2022.02.01 감사합니다)
+마지막 업데이트 : 오류시 개인 이용자는 -오리-에 남겨주세요.
 다른 인원의 댓글은 건들지 말아주세요 부탁드립니다...
 
 !흰쥐찰리 -> 찰리봇의 모든 명령어를 볼 수 있습니다.
@@ -176,8 +176,8 @@ async def 들어와잇(ctx):
         await ctx.send(embed=discord.Embed(title='찰리봇 도우미', description="""
 찰리봇 주인 : https://github.com/jiho3894
 오리 : http://duckpan.shop/
-(2022.02.01)
-마지막 업데이트 오류시 개인 이용자는 *오리*에 남겨주세요
+(2022.02.01 감사합니다)
+마지막 업데이트 : 오류시 개인 이용자는 -오리-에 남겨주세요
 다른 인원의 댓글은 건들지 말아주세요 부탁드립니다...
 
 !흰쥐찰리 -> 찰리봇의 모든 명령어를 볼 수 있습니다.
