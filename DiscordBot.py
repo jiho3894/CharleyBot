@@ -139,11 +139,10 @@ def load_chrome_driver():
 async def 흰쥐찰리(ctx):
     await ctx.send(embed=discord.Embed(title='찰리봇 도우미', description="""
 찰리봇 주인 : https://github.com/jiho3894
-찰리플릭스 (작업중): https://jiho3894.github.io/kimcharley/
-찰리코인 : https://jiho3894.github.io/CoinSite/
-(2022.01.18 version)
-완료 : 즐겨찾기 명령어 추가
-예정 : 즐겨찾기 플레이리스트로 추가 (현재는 목록 추가후 !목록재생으로 사용바람)
+오리 : http://duckpan.shop/
+(2022.02.01)
+마지막 업데이트 오류시 개인 이용자는 *오리*에 남겨주세요
+다른 인원의 댓글은 건들지 말아주세요 부탁드립니다...
 
 !흰쥐찰리 -> 찰리봇의 모든 명령어를 볼 수 있습니다.
 \n!들어와잇 -> 찰리봇을 자신이 속한 채널로 부릅니다.
@@ -157,14 +156,14 @@ async def 흰쥐찰리(ctx):
 !다시재생 -> 일시정지시킨 노래를 다시 재생합니다.
 \n!지금노래 -> 지금 재생되고 있는 노래의 제목을 알려줍니다.
 \n!멜론차트 -> 최신 멜론차트를 재생합니다.
-\n!즐겨찾기 -> 본인의 즐겨찾기 목록을 보여줍니다. (현재는 목록 추가후 !목록재생으로 사용바람)
+\n!즐겨찾기 -> 본인의 즐겨찾기 목록을 보여줍니다. (목록 추가후 !목록재생으로 사용)
 !즐겨찾기추가 [가수명] [노래제목]-> 본인의 즐겨찾기 목록에 노래를 추가합니다.
 !즐겨찾기삭제 [재생 순서 숫자]-> 본인의 즐겨찾기 목록에 노래를 삭제합니다.
 \n!목록 -> 이어서 재생할 노래목록을 보여줍니다.
 !목록재생 -> 목록에 추가된 노래를 재생합니다.
 !목록초기화 -> 목록에 추가된 모든 노래를 지웁니다.
 \n!대기열추가 [노래] -> 노래를 대기열에 추가합니다.
-!대기열삭제 [재생 순서 숫자] -> 대기열에서 입력한 숫자에 해당하는 노래를 지웁니다.
+!대기열삭제 [숫자] -> 대기열에서 입력한 숫자에 해당하는 노래를 지웁니다.
 \n!노래틀어 [노래 유튜브링크] -> 유튜브URL를 입력하면 찰리봇이 노래를 틀어줍니다.
 (목록재생에서는 사용할 수 없습니다. 1회용입니다)""", color=0x00ffff))
 
@@ -176,11 +175,10 @@ async def 들어와잇(ctx):
         vc = await ctx.message.author.voice.channel.connect()
         await ctx.send(embed=discord.Embed(title='찰리봇 도우미', description="""
 찰리봇 주인 : https://github.com/jiho3894
-찰리플릭스 : https://jiho3894.github.io/kimcharley/
-찰리코인 : https://jiho3894.github.io/CoinSite/
-(2022.01.18 version)
-완료 : 즐겨찾기 명령어 추가
-예정 : 즐겨찾기 플레이리스트로 추가 (현재는 목록 추가후 !목록재생으로 사용바람)
+오리 : http://duckpan.shop/
+(2022.02.01)
+마지막 업데이트 오류시 개인 이용자는 *오리*에 남겨주세요
+다른 인원의 댓글은 건들지 말아주세요 부탁드립니다...
 
 !흰쥐찰리 -> 찰리봇의 모든 명령어를 볼 수 있습니다.
 \n!들어와잇 -> 찰리봇을 자신이 속한 채널로 부릅니다.
@@ -194,7 +192,7 @@ async def 들어와잇(ctx):
 !다시재생 -> 일시정지시킨 노래를 다시 재생합니다.
 \n!지금노래 -> 지금 재생되고 있는 노래의 제목을 알려줍니다.
 \n!멜론차트 -> 최신 멜론차트를 재생합니다.
-\n!즐겨찾기 -> 본인의 즐겨찾기 목록을 보여줍니다. (현재는 목록 추가후 !목록재생으로 사용바람)
+\n!즐겨찾기 -> 본인의 즐겨찾기 목록을 보여줍니다. (목록 추가후 !목록재생으로 사용)
 !즐겨찾기추가 [가수명] [노래제목]-> 본인의 즐겨찾기 목록에 노래를 추가합니다.
 !즐겨찾기삭제 [재생 순서 숫자]-> 본인의 즐겨찾기 목록에 노래를 삭제합니다.
 \n!목록 -> 이어서 재생할 노래목록을 보여줍니다.
@@ -587,7 +585,7 @@ async def on_reaction_add(reaction, users):
             pass
         else:
             if str(reaction.emoji) == '\U0001F4E5':
-                await reaction.message.channel.send("잠시만 기다려주세요. (즐겨찾기 갯수가 많으면 지연될 수 있습니다.)")
+                await reaction.message.channel.send("노래 넣어요 (즐겨찾기 갯수가 많으면 지연될 수 있습니다.)")
                 print(users.name)
                 for i in range(len(userFlist)):
                     if userFlist[i][0] == str(users.name):
@@ -603,6 +601,6 @@ async def on_reaction_add(reaction, users):
                             song_queue.append(URLTEST)
                             await reaction.message.channel.send(userFlist[i][j] + "를 재생목록에 추가했어요!")
             elif str(reaction.emoji) == '\U0001F4DD':
-                await reaction.message.channel.send("playlist test code...")
+                await reaction.message.channel.send("no code")
 
 bot.run('OTI1MjU3NDM3MjM2MzIyMzk1.YcqfIw.fvKuSnUfibxhiKUHSOZkQaEqySw')
