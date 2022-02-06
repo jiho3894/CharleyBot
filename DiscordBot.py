@@ -603,4 +603,4 @@ async def on_reaction_add(reaction, users):
             elif str(reaction.emoji) == '\U0001F4DD':
                 await reaction.message.channel.send("no code")
 
-bot.run('OTI1MjU3NDM3MjM2MzIyMzk1.YcqfIw.fvKuSnUfibxhiKUHSOZkQaEqySw')
+bot.run('token')
