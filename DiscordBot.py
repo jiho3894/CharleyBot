@@ -270,7 +270,9 @@ async def 재생(ctx, *, msg):
         source = driver.page_source
         bs = bs4.BeautifulSoup(source, 'lxml')
         entire = bs.find_all('a', {'id': 'video-title'})
+        print(entire)
         entireNum = entire[0]
+        print(entireNum)
         entireText = entireNum.text.strip()
         musicurl = entireNum.get('href')
         url = 'https://www.youtube.com'+musicurl
