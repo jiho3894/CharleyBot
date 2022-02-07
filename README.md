@@ -1,3 +1,5 @@
+![0](https://user-images.githubusercontent.com/79081800/150473965-fbc32c06-12b2-4b22-8c75-fba34e923475.jpg)
+
 - 찰리봇 주인 : https://github.com/jiho3894
 - 오리 : http://duckpan.shop/
 - (2022.02.06 감사합니다)
